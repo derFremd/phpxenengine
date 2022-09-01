@@ -1,0 +1,85 @@
+<style>
+    div {
+        border: 1px solid;
+        border-radius: 3px;
+        margin: 3px;
+        padding: 3px;
+    }
+</style>
+
+<h4>Below are samples with external template file
+    <a href='../tpl/samples/VisualBlockSample.html' target='_blank'>VisualBlockSample.html</a>, see VisualBlock::setTemplate()</h4>
+
+<h4>String constants, see VisualBlock::setStrLoader()</h4>
+<div>
+<ul>
+    <li>String constant 'text_1': <b>{{STR:text_1}}</b></li>
+    <li>String constant 'text_2': <b>{{STR:text_2}}</b></li>
+    <li>Missing string constant 'text_missing': <b>{{STR:text_missing}}</b></li>
+</ul>
+</div>
+
+<h4>Sets variables using magic method of class VisualBlock::__set(). Usage: $visualBlock->varName = value;</h4>
+<div>
+<ul>
+    <li>Variable '$vBlock->var_1' (string var): <b>{{VAR:var_1}}</b></li>
+    <li>Array variable '$vBlock->var_2' ($var_2[0] is current value): <b>{{VAR:var_2}}</b>%</li>
+    <li>Variable '$vBlock->var_3' (value points at string constant '$text_1'): <b>{{VAR:var_3}}</b></li>
+    <li>Variable '$vBlock->var_4' (value points at missing string constant): <b>{{VAR:var_4}}</b></li>
+    <li>Variable '$vBlock->var_5' (Object, tries calling function obj::__toString()): <b>{{VAR:var_5}}</b></li>
+    <li>Variable '$vBlock->var_6' (int variable, increment operator '++'): <b>{{VAR:var_6}}</b></li>
+    <li>Variable '$vBlock->var_7' (bool variable): <b>{{VAR:var_7}}</b></li>
+    <li>If variable is not set (no changes): <b>{{VAR:var_missing}}</b></li>
+</ul>
+</div>
+<h4>Sets named array of variables, see VisualBlock::setVars()</h4>
+<div>
+Virtuality:
+<ul>
+    <li>Name: <b>{{VAR:form_virtuality_name}}</b></li>
+    <li>Profession: <b>{{VAR:form_virtuality_profession}}</b></li>
+    <li>Residence: <b>{{VAR:form_virtuality_residence}}</b></li>
+</ul>
+Reality:
+<ul>
+    <li>Name: <b>{{VAR:form_reality_name}}</b> (is changed after VisualBlock::setVars() by $vBlock->form_reality_name = 'Trinity';)</li>
+    <li>Profession: <b>{{VAR:form_reality_profession}}</b></li>
+    <li>Residence: <b>{{VAR:form_reality_residence}}</b></li>
+</ul>
+</div>
+<h4>Include of external file 'IncludedFile.html', see VisualBlock::setVarFile()</h4>
+
+<div>{{VAR:file_id}}</div>
+
+<h4>External block as variable</h4>
+<div>{{VAR:subBlock}}</div>
+
+<h4>Disabled block - block will never be shown, see VisualBlock::[dis|en]able()</h4>
+<div>{{VAR:disabledBlock}}</div>
+
+<h4>Surrounded block with prefix and suffix, see VisualBlock::(set|get)Prefix(), VisualBlock::[set|get]Suffix() and
+    VisualBlock::setPrefixSuffix()</h4>
+<div>{{VAR:surroundedBlock}}</div>
+
+<h4>Block repeating and pointer shift of the array variables, see VisualBlock::setCounter() and VisualBlock::[en|dis]ableShiftArrayValue()</h4>
+<div>Content of $subBlock2 (shift is on):  <b>{{VAR:subBlock2}}</b></div>
+<div>Content of $subBlock3 (shift is off): <b>{{VAR:subBlock3}}</b></div>
+
+<h4>Callback function</h4>
+<div>Even numbers: <b>{{VAR:subBlock4}}</b></div>
+
+<h4>Making sub-blocks from the same template file, see VisualBlock::makeSubBlocks()</h4>
+{{BEGIN:subBlock5}}
+<div>Begin of sub-block and variable $var_2 from parent is '<b>{{VAR:var_2}}</b>'.<br>
+    This block has name '<b>{{VAR:blockName}}</b>'.
+{{BEGIN:subSubBlock}}
+<div>
+    And this is template of sub-sub-block and variable $var_2 from parent-parent block is '<b>{{VAR:var_2}}</b>'.<br>
+    This block has name '<b>{{VAR:blockName}}</b>'.<br>
+    The string text_2='<b>{{STR:text_2}}</b>' loaded by StringLoader from parent-parent.<br>
+    The variable $var_3='<b>{{VAR:var_3}}</b>' from parent-parent, linked from string constant '$text_1'.
+</div>
+{{END:subSubBlock}}
+End of sub-block template.
+</div>
+{{END:subBlock5}}
