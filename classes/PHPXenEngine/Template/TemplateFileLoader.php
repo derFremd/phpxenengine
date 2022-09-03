@@ -17,10 +17,10 @@ use PHPXenEngine\Template\TemplateLoader as TemplateLoader;
 class TemplateFileLoader extends TemplateLoader
 {
 
-    /**
+    /*
      * Enabled file extensions
      */
-    public const EXT_FILES = ['html', 'tpl', 'css', 'txt'];
+    private const EXT_FILES = ['html', 'tpl', 'css', 'txt'];
 
     /*
      * The path where the template is
@@ -35,8 +35,11 @@ class TemplateFileLoader extends TemplateLoader
      */
     function __construct(string $tplName, string $path = __DIR__, string $lang = parent::DEFAULT_LANG)
     {
-        parent::__construct($tplName, $lang);
-        $this->path = $path;
+        parent::__construct(
+            str_replace(DIRECTORY_SEPARATOR ,'', $tplName), // protects name
+            str_replace(DIRECTORY_SEPARATOR , '', $lang) // protects language ext.
+        );
+        $this->setPath($path);
     }
 
     /**
@@ -46,7 +49,7 @@ class TemplateFileLoader extends TemplateLoader
      */
     public function setPath(string $path): self
     {
-        $this->path = $path;
+        $this->path = ((($realpath = realpath($path)) === false) ? __DIR__ : $realpath);
         $this->reset();
         return $this;
     }
