@@ -71,10 +71,11 @@ abstract class TemplateLoader
      * Function reset loaded template.
      * @return void
      */
-    public function reset()
+    public function reset(): self
     {
         $this->isLoaded = false;
         $this->tplBody = '';
+        return $this;
     }
 
     /**
