@@ -2,6 +2,8 @@
 
 namespace PHPXenEngine\Template;
 
+use Exception;
+
 /**
  * TemplateLoader.php
  *
@@ -112,7 +114,12 @@ abstract class TemplateLoader
      */
     public function get(): string
     {
-        return $this->isLoaded ? $this->tplBody : $this->set($this->load());
+        try {
+            return $this->isLoaded ? $this->tplBody : $this->set($this->load());
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
+        }
+        return 'Error: ' . self::class . '(' . $this->getName() . ')';
     }
 
     /**
@@ -129,6 +136,7 @@ abstract class TemplateLoader
      * Function to realise template loading procedure.
      * To implement your loading function, redefine it in your class.
      * @return string loaded template string
+     * @throws Exception if the resource is unavailable
      */
     abstract protected function load(): string;
 
@@ -143,4 +151,5 @@ abstract class TemplateLoader
         $this->tplBody = $tplBody;
         return $this->tplBody;
     }
+
 } // End of class TemplateLoader
