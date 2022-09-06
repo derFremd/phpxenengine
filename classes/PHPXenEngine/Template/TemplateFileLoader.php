@@ -3,6 +3,7 @@
 namespace PHPXenEngine\Template;
 
 use PHPXenEngine\Template\TemplateLoader as TemplateLoader;
+use Exception;
 
 /**
  * TemplateFileLoader.php
@@ -97,10 +98,14 @@ class TemplateFileLoader extends TemplateLoader
     /**
      * Function returns body of the template.
      * @return string template as string
+     * @throws Exception if the resource is unavailable
      */
     protected function load(): string
     {
-        return !empty($fullName = $this->searchFullName()) ? file_get_contents($fullName) :
-            'Error: template \'' . $this->getName() . '\' is not found at \'' . $this->path . '\'';
+        if(empty($fullName = $this->searchFullName())) {
+            throw new Exception('Template file \'' . $this->getName() . '\' is not found' .
+            empty($this->path) ? '' : ' at \'' . $this->$this->path . '\'');
+        }
+        return file_get_contents($fullName);
     }
 } // End of class TemplateFileLoader

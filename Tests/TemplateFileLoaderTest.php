@@ -1,9 +1,9 @@
 <?php
 
-namespace PHPXenEngine\Template;
+namespace Tests;
 
-require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateLoader.php';
-require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateFileLoader.php';
+//require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateLoader.php';
+//require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateFileLoader.php';
 
 use PHPUnit\Framework\TestCase as TestCase;
 use PHPXenEngine\Template\TemplateFileLoader as TemplateFileLoader;
@@ -26,14 +26,16 @@ class TemplateFileLoaderTest extends TestCase
 
     public function testGetExtensions()
     {
-        $this->assertIsArray(TemplateFileLoader::getExtensions());
+        $ext = TemplateFileLoader::getExtensions();
+        $this->assertIsArray($ext);
+        $this->assertNotEmpty($ext);
     }
 
     public function testSetPath()
     {
         $path = realpath(__DIR__);
         $tl = new TemplateFileLoader('name', $path);
-        $this->assertEquals($tl->getPath(), $path);
+        $this->assertEquals($path, $tl->getPath());
     }
 
     public function testNameDirSeparatorProtect() {
@@ -46,15 +48,14 @@ class TemplateFileLoaderTest extends TestCase
         $nameNoSep = implode($arrayOfName) . '.' . implode($arrayOfExt);
 
         $tl = new TemplateFileLoader($nameWithSep, __DIR__, $extWithSep);
-        $this->assertEquals($tl->getName(), $nameNoSep);
+        $this->assertEquals($nameNoSep, $tl->getName());
 
     }
 
     public function testFileNotFound() {
-        $name = uniqid();
-        $tl = new TemplateFileLoader($name);
-        $error_msg = 'Error: template \'' . $name . '\' is not found at \'' . $tl->getPath() . '\'';
-        $this->assertEquals($tl->get(), $error_msg);
+        $tl = new TemplateFileLoader(uniqid());
+        $message = $tl->get();
+        $this->assertStringStartsWith('Error', $message, $message);
     }
 
     public function testFileFound() {
@@ -65,6 +66,6 @@ class TemplateFileLoaderTest extends TestCase
 
         $content = file_get_contents($path . $name . $ext);
 
-        $this->assertEquals($tl->get(), $content);
+        $this->assertEquals($content, $tl->get());
     }
 }
