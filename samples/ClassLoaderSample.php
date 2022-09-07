@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../classes/init.php';
 
-use PHPXenEngine\Test\Test as Test;
+use PHPXenEngine\Tests\EmptyClass as EmptyClass;
 
-$testClass = new Test();
+$testClass = new EmptyClass();
 
 echo "<h4>Dump of loaded class Test</h4>";
 print "<pre>";
