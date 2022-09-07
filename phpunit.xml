@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- bootstrap disabled (see composer.json): phpunit colors="true" bootstrap="Tests/autoload.php"-->
+<phpunit colors="true">
+    <php>
+        <var name="DB_SQL" value="mysql" />
+        <var name="DB_HOST" value="localhost" />
+        <var name="DB_USER" value="test" />
+        <var name="DB_PASSWORD" value="test" />
+        <var name="DB_DBNAME" value="test" />
+        <var name="DB_CHARSET" value="utf8" />
+    </php>
+
+    <testsuites>
+        <testsuite name="PHPXenEngineSuite">
+            <directory suffix="Test.php">classes/PHPXenEngine/Tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
