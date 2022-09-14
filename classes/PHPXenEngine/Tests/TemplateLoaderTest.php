@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests;
+namespace PHPXenEngine\Tests;
 
 //require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateLoader.php';
 
 use PHPUnit\Framework\TestCase as TestCase;
-use Tests\TemplateLoaderImplPHPUnit as TLImpl;
+use PHPXenEngine\Tests\TemplateLoaderImplPHPUnit as TLImpl;
 
 class TemplateLoaderTest extends TestCase
 {

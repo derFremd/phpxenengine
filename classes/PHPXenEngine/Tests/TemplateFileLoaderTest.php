@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace PHPXenEngine\Tests;
 
 //require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateLoader.php';
 //require_once __DIR__ . '/../classes/PHPXenEngine/Template/TemplateFileLoader.php';
@@ -45,7 +45,7 @@ class TemplateFileLoaderTest extends TestCase
         $nameWithSep = implode(DIRECTORY_SEPARATOR, $arrayOfName);
         $extWithSep = implode(DIRECTORY_SEPARATOR, $arrayOfExt);
 
-        $nameNoSep = implode($arrayOfName) . '.' . implode($arrayOfExt);
+        $nameNoSep = implode($arrayOfName) . '.' .  implode($arrayOfExt);
 
         $tl = new TemplateFileLoader($nameWithSep, __DIR__, $extWithSep);
         $this->assertEquals($nameNoSep, $tl->getName());
@@ -61,10 +61,9 @@ class TemplateFileLoaderTest extends TestCase
     public function testFileFound() {
         $name = 'IncludedFile';
         $ext = '.html';
-        $path = realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'tpl', 'samples'])) . DIRECTORY_SEPARATOR;
+        $path = realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', '..', 'tpl', 'samples']));
         $tl = new TemplateFileLoader($name, $path);
-
-        $content = file_get_contents($path . $name . $ext);
+        $content = file_get_contents($path . DIRECTORY_SEPARATOR . $name . $ext);
 
         $this->assertEquals($content, $tl->get());
     }
