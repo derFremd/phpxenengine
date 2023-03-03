@@ -96,8 +96,8 @@ class VisualBlock
     private bool $isParsed; // is block parsed
     private string $parsedStr; // cache of parsed template
 
-    private string $prefix; // static prefix of block
-    private string $suffix; // static suffix of block
+    private $prefix; // static prefix of block
+    private $suffix; // static suffix of block
     private ?string $template; // template string
     private ?TemplateLoader $templateLoader; // TemplateLoader or null
     private ?StringLoader $strLoader; // StringLoader or null
@@ -187,18 +187,20 @@ class VisualBlock
 
     /**
      * Sets string prefix of block.
-     * @param string $prefix string of prefix
+     * @param string|VisualBlock $prefix string of prefix
      * @return $this reference to this instance of the class
      */
-    public function setPrefix(string $prefix): self
+    public function setPrefix($prefix): self
     {
-        $this->prefix = $prefix;
+        if (is_string($prefix) || $prefix instanceof VisualBlock) {
+            $this->prefix = $prefix;
+        }
         return $this;
     }
 
     /**
      * Gets string prefix of block.
-     * @return string string prefix
+     * @return string|VisualBlock string prefix
      */
     public function getPrefix(): string
     {
@@ -207,18 +209,20 @@ class VisualBlock
 
     /**
      * Sets string suffix of block.
-     * @param string $suffix string suffix
+     * @param string|VisualBlock $suffix string suffix
      * @return $this reference to this instance of the class
      */
-    public function setSuffix(string $suffix): self
+    public function setSuffix($suffix): self
     {
-        $this->suffix = $suffix;
+        if (is_string($suffix) || $suffix instanceof VisualBlock) {
+            $this->suffix = $suffix;
+        }
         return $this;
     }
 
     /**
      * Gets string suffix of block.
-     * @return string string suffix
+     * @return string|VisualBlock string suffix
      */
     public function getSuffix(): string
     {
@@ -227,11 +231,11 @@ class VisualBlock
 
     /**
      * Sets string prefix and suffix of block.
-     * @param string $prefix string prefix
-     * @param string|null $suffix string of suffix (if null then $suffix = $prefix)
+     * @param string|VisualBlock|null $prefix string prefix
+     * @param string|VisualBlock|null $suffix string of suffix (if null then $suffix = $prefix)
      * @return $this reference to this instance of the class
      */
-    public function setPrefixSuffix(string $prefix = self::EMPTY_STR, string $suffix = null): self
+    public function setPrefixSuffix($prefix = self::EMPTY_STR, $suffix = null): self
     {
         return $this->setPrefix($prefix)->setSuffix($suffix ?? $prefix);
     }
@@ -331,22 +335,26 @@ class VisualBlock
         return $this;
     }
 
-    /*
-     * The function sets the value of the block variable.
-     * For internal use or in an extended class.
+    /**
+     * The function sets the variable of the block.
+     * Usage in Template: '...{{VAR:name1}}...{{VAR:name2}}...'
+     * @param string $name variable name
+     * @param mixed $val variable value
+     * @return $this reference to this instance of the class
      */
-    protected function setVar(string $name, $val): void
+    public function setVar(string $name, $val): self
     {
         if (($this->vars[$name] = $val) instanceof VisualBlock) {
             $val->setParent($this)->setName($this->getName() . '.' . $name);
         }
+        return $this;
     }
 
     /**
      * Magic function to set variable of block. Do not use this function directly!
      * To set a variable of the block, use the usual assignment.
-     * Usage in Template: '...{{VAR:name1}}...{{VAR:name2}}...'
      * Usage in PHP code: $visualBlock->varName = value_1;
+     * Usage in Template: '...{{VAR:name1}}...{{VAR:name2}}...'
      * @param string $name variable name
      * @param mixed $val variable value
      * @return void

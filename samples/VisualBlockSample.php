@@ -68,7 +68,8 @@ $vBlock->setVarFile('file_id', 'IncludedFile');
 
 
 // Includes external block with own dynamic content
-$vBlock->subBlock = new VisualBlock('This is content of external subBlock as variable: {{VAR:subBlock}}' );
+$vBlock->subBlock = (new VisualBlock('This is content of external \'subBlock\' as variable: subBlockVar={{VAR:subBlockVar}}'))
+    ->setVar('subBlockVar', 'Value of subBlockVar');
 
 // Disabled block
 $vBlock->disabledBlock = new VisualBlock('This content of disabled block will not be shown.');
@@ -76,23 +77,24 @@ $vBlock->disabledBlock->disable();
 
 // Prefix and suffix of the block
 $vBlock->surroundedBlock = new VisualBlock(' This is surroundedBlock. ');
-$vBlock->surroundedBlock->setPrefix('[This is a prefix]');
-$vBlock->surroundedBlock->setSuffix('[This is a suffix]');
+$vBlock->surroundedBlock->setPrefix(new VisualBlock('[This is a prefix by VisualBlock]'));
+$vBlock->surroundedBlock->setSuffix('[This is a simple string suffix]');
 
 // Sample possibilities:
 // - block repeat
 // - pointer shift of the array variables
 
 // Block with repeat mode and enabled array pointer shift
-$vBlock->subBlock2 = new VisualBlock(' {{VAR:array_item}} ');
+$vBlock->subBlock2 = new VisualBlock(' {{VAR:array_item}}{{VAR:array_item2}} ');
 $vBlock->subBlock2->array_item = [1,2,3,4,5];
 $vBlock->subBlock2->array_item[]=5; // add new array item
 $vBlock->subBlock2->array_item[5]++; // increment new array item
 // Shifts array pointer 2 times. Now current value is '3'.
 VisualBlock::setVarArrayIndex($vBlock->subBlock2->array_item,2);
+$vBlock->subBlock2->array_item2 = [';', ',']; // Second array
 $vBlock->subBlock2->setCounter(6);
 $vBlock->subBlock2->enableShiftArrayPointer();
-$vBlock->subBlock2->setPrefixSuffix('*','*');
+$vBlock->subBlock2->setPrefixSuffix('<<<<<<', (new VisualBlock('>'))->setCounter(6));
 
 // Block with repeat mode and disabled array pointer shift (by default)
 $vBlock->subBlock3 = new VisualBlock(' {{VAR:array_item}} ');
